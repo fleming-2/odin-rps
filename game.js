@@ -1,5 +1,15 @@
 "use strict";
 
+// Interaction for UI
+// Listen for button presses for human choice
+let buttons = document.querySelectorAll("body > button");
+buttons.forEach(function(btn) {
+    btn.addEventListener("click", function(e) {
+        let humanChoice = e.target.getAttribute("id");
+        playRound(humanChoice, getComputerChoice());
+    });
+});
+
 function getComputerChoice() {
     let choice = Math.random() * 3;
     if (choice < 1) {
@@ -10,22 +20,6 @@ function getComputerChoice() {
         return "scissors";
     }
 }
-
-// Get a choice as a string from the human player
-function getHumanChoice() {
-    let choice;
-    let promptMessage = "Enter your choice:"
-
-    do {
-        choice = prompt(promptMessage);
-        choice = choice.trim().toLowerCase();
-
-        promptMessage = "Your choice must be one of rock, paper, or scissors:"
-    } while (choice !== "rock" && choice !== "paper" && choice !== "scissors");
-
-    return choice;
-}
-
 
 // Returns the choice that would beat another
 function beats(choice) {
@@ -40,48 +34,19 @@ function beats(choice) {
 }
 
 
+function playRound(humanChoice, computerChoice) {
+    let message = "invalid input"; // Indicates no condition satisfied
 
-// --- Core game logic ---
-
-function playGame() {
-    let humanScore = 0;
-    let computerScore = 0;
-
-    function playRound(humanChoice, computerChoice) {
-        let message = "invalid input"; // Indicates no condition satisfied
-
-        if (computerChoice == humanChoice) {
-            message = "Tie!";
-        }
-        else if (computerChoice === beats(humanChoice)) {
-            message = `You lose! ${computerChoice} beats ${humanChoice}.`;
-            computerScore++;
-        }
-        else if (humanChoice === beats(computerChoice)) {
-            message = `You win! ${humanChoice} beats ${computerChoice}.`;
-            humanScore++;
-        }
-        console.log(message);
+    if (computerChoice == humanChoice) {
+        message = "Tie!";
     }
-
-    // Play 5 rounds
-    for (let i = 0; i < 5; i++) {
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
-
-        playRound(humanSelection, computerSelection);
+    else if (computerChoice === beats(humanChoice)) {
+        message = `You lose! ${computerChoice} beats ${humanChoice}.`;
+        computerScore++;
     }
-
-    // Declare the winner
-    let endMessage = "All rounds played. "
-    if (humanScore > computerScore) {
-        endMessage += "The human wins!"
+    else if (humanChoice === beats(computerChoice)) {
+        message = `You win! ${humanChoice} beats ${computerChoice}.`;
+        humanScore++;
     }
-    else if (computerScore > humanScore) {
-        endMessage += "The computer wins!"
-    }
-    else {
-        endMessage += "The game ends with a tie!"
-    }
-    console.log(endMessage);
+    console.log(message);
 }
