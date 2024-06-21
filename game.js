@@ -33,6 +33,8 @@ function beats(choice) {
     }
 }
 
+// Where the result is displayed
+let result = document.querySelector("#result");
 
 function playRound(humanChoice, computerChoice) {
     let message = "invalid input"; // Indicates no condition satisfied
@@ -42,11 +44,10 @@ function playRound(humanChoice, computerChoice) {
     }
     else if (computerChoice === beats(humanChoice)) {
         message = `You lose! ${computerChoice} beats ${humanChoice}.`;
-        computerScore++;
     }
     else if (humanChoice === beats(computerChoice)) {
         message = `You win! ${humanChoice} beats ${computerChoice}.`;
-        humanScore++;
     }
-    console.log(message);
+
+    result.textContent = message;
 }
