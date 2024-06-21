@@ -2,7 +2,7 @@
 
 // Interaction for UI
 // Listen for button presses for human choice
-let buttons = document.querySelectorAll("body > button");
+let buttons = document.querySelectorAll("#choice-ui button");
 buttons.forEach(function(btn) {
     btn.addEventListener("click", function(e) {
         let humanChoice = e.target.getAttribute("id");
@@ -59,17 +59,19 @@ function updateScores(winner) {
 }
 
 function endGame(winner) {
-    let msg = "Game Over! "
+    let winnerName;
     switch(winner) {
         case 1:
-            msg += "The Human wins"
+            winnerName = "Human";
             break;
         case -1:
-            msg += "The Computer wins"
+            winnerName = "Computer";
+            break;
     }
+    let msg = `Game Over! The ${winnerName} wins.`;
 
     // Display game over information
-    let gameOverDisplay = document.createElement("p");
+    let gameOverDisplay = document.createElement("h4");
     gameOverDisplay.textContent = msg;
     result.appendChild(gameOverDisplay);
 
@@ -78,16 +80,24 @@ function endGame(winner) {
     result.appendChild(playAgainButton);
 
     playAgainButton.addEventListener("click", resetGame);
+
+    // Hide choice UI
+    document.getElementById("choice-ui").classList.add("hidden");
+
 }
 
 function resetGame() {
     // Clear the displayed results ui
     result.textContent = '';
 
+    // Reset scores
     humanScore = 0;
     computerScore = 0;
     humanScoreDisplay.textContent = humanScore;
     computerScoreDisplay.textContent = computerScore;
+
+    // Display choice ui again
+    document.getElementById("choice-ui").classList.remove("hidden");
 }
 
 // TODO: Factor out updating the DOM from this function, move to updateScores?
