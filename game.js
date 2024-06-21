@@ -33,20 +33,46 @@ function beats(choice) {
     }
 }
 
-// Where the result is displayed
+// Elements to update when tracking score
 let result = document.querySelector("#result");
+let humanScoreDisplay = document.getElementById("human-score");
+let computerScoreDisplay = document.getElementById("computer-score")
 
-function playRound(humanChoice, computerChoice) {
-    let message = "invalid input"; // Indicates no condition satisfied
+let humanScore = 0;
+let computerScore = 0;
 
-    if (computerChoice == humanChoice) {
-        message = "Tie!";
+// Takes 1 for a human win, -1 for a computer win, 0 for tie
+function updateScores(winner) {
+    let hs = humanScore;
+    let cs = computerScore
+    switch (winner) {
+        case 1:
+            humanScore++;
+            humanScoreDisplay.textContent = humanScore;
+            break;
+        case -1:
+            computerScore++;
+            computerScoreDisplay.textContent = computerScore;
+            break;
     }
-    else if (computerChoice === beats(humanChoice)) {
-        message = `You lose! ${computerChoice} beats ${humanChoice}.`;
+    // TODO: Display overall winner after 5 wins
+}
+
+// TODO: Factor out updating the DOM from this function, move to updateScores?
+function playRound(humanChoice, computerChoice) {
+    let message = "Invalid choice";
+
+    if (computerChoice === humanChoice) {
+        message = "Tie!";
+        updateScores(0);
     }
     else if (humanChoice === beats(computerChoice)) {
         message = `You win! ${humanChoice} beats ${computerChoice}.`;
+        updateScores(1);
+    }
+    else if (computerChoice === beats(humanChoice)) {
+        message = `You lose! ${computerChoice} beats ${humanChoice}.`;
+        updateScores(-1);
     }
 
     result.textContent = message;
