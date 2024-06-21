@@ -43,8 +43,6 @@ let computerScore = 0;
 
 // Takes 1 for a human win, -1 for a computer win, 0 for tie
 function updateScores(winner) {
-    let hs = humanScore;
-    let cs = computerScore
     switch (winner) {
         case 1:
             humanScore++;
@@ -55,25 +53,60 @@ function updateScores(winner) {
             computerScoreDisplay.textContent = computerScore;
             break;
     }
-    // TODO: Display overall winner after 5 wins
+    if (humanScore === 5 || computerScore === 5) {
+        endGame(winner);
+    }
+}
+
+function endGame(winner) {
+    let msg = "Game Over! "
+    switch(winner) {
+        case 1:
+            msg += "The Human wins"
+            break;
+        case -1:
+            msg += "The Computer wins"
+    }
+
+    // Display game over information
+    let gameOverDisplay = document.createElement("p");
+    gameOverDisplay.textContent = msg;
+    result.appendChild(gameOverDisplay);
+
+    let playAgainButton = document.createElement("button");
+    playAgainButton.textContent = "Play Again";
+    result.appendChild(playAgainButton);
+
+    playAgainButton.addEventListener("click", resetGame);
+}
+
+function resetGame() {
+    // Clear the displayed results ui
+    result.textContent = '';
+
+    humanScore = 0;
+    computerScore = 0;
+    humanScoreDisplay.textContent = humanScore;
+    computerScoreDisplay.textContent = computerScore;
 }
 
 // TODO: Factor out updating the DOM from this function, move to updateScores?
 function playRound(humanChoice, computerChoice) {
     let message = "Invalid choice";
+    let winner;
 
     if (computerChoice === humanChoice) {
         message = "Tie!";
-        updateScores(0);
     }
     else if (humanChoice === beats(computerChoice)) {
         message = `You win! ${humanChoice} beats ${computerChoice}.`;
-        updateScores(1);
+        winner = 1;
     }
     else if (computerChoice === beats(humanChoice)) {
         message = `You lose! ${computerChoice} beats ${humanChoice}.`;
-        updateScores(-1);
+        winner = -1;
     }
 
     result.textContent = message;
+    updateScores(winner);
 }
